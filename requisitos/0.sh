@@ -62,8 +62,8 @@ echo "======================="
                 #Mostrar logo1 + interfaces#
                 card 
                 echo
-                read -p "[*] Escribe la Interfaz de la Tarjeta de Red en mod>
-                echo
+               read -p "[*] Escribe la Interfaz de la Tarjeta de Red en modo Monitor (Ej: wlan0mon o wlan0): " interfaz2
+                 echo
                  ifconfig $interfaz2 promisc >/dev/null
                  ifconfig $interfaz2 down >/dev/null
                 sleep 2.5
