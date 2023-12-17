@@ -94,7 +94,7 @@ function logo2 {
 
 check_wifi_mode() {
 	#Gurdar en el contenedor $modo si la tarjeta esta en modo Monitor o Managed
-  mode_check=$(sudo iwconfig $1 | grep Mode | awk '{print $1}')
+  mode_check=$(iwconfig $1 | grep Mode | awk '{print $1}')
   if [ "$mode_check" == "Mode:Monitor" ]; then
     mode=Monitor
   else
@@ -123,7 +123,7 @@ function ActMonitor {
 		echo
 		if [ $fails = y ]
 			then
-				sudo airmon-ng check kill >/dev/null
+				airmon-ng check kill >/dev/null
 			else
 				echo "OK"
 		fi
