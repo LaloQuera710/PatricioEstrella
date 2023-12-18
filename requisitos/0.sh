@@ -94,7 +94,7 @@ function logo2 {
 
 check_wifi_mode() {
 	#Gurdar en el contenedor $modo si la tarjeta esta en modo Monitor o Managed
-  mode_check=$(iwconfig $1 | grep Mode | awk '{print $1}')
+  mode_check=$(sudo iwconfig $1 | grep Mode | awk '{print $1}')
   if [ "$mode_check" == "Mode:Monitor" ]; then
     mode=Monitor
   else
@@ -123,12 +123,12 @@ function ActMonitor {
 		echo
 		if [ $fails = y ]
 			then
-				airmon-ng check kill >/dev/null
+      airmon-ng check kill >/dev/null
 			else
 				echo "OK"
 		fi
-		 ifconfig $interfaz promisc >/dev/null
-		 airmon-ng start $interfaz >/dev/null
+		 $ifconfig $interfaz promisc >/dev/null
+		$airmon-ng start $interfaz >/dev/null
 		echo "======================="
 		echo "Activando Modo Monitor"
 		echo "======================="
@@ -145,11 +145,11 @@ function ActMonitor {
 		echo
 		read -p "[*] Escribe la Interfaz de la Tarjeta de Red en modo Monitor (Ej: wlan0mon o wlan0): " interfaz2
 		echo
-		 ifconfig $interfaz2 promisc >/dev/null
-		 ifconfig $interfaz2 down >/dev/null
+		$ifconfig $interfaz2 promisc >/dev/null
+		$ifconfig $interfaz2 down >/dev/null
 		sleep 2.5
-		 macchanger -a $interfaz2 >/dev/null
-		 ifconfig $interfaz2 up >/dev/null
+		$macchanger -a $interfaz2 >/dev/null
+		$ifconfig $interfaz2 up >/dev/null
 		echo "======================="
 		echo " Activando Modo Seguro"
 		echo "======================="
@@ -169,12 +169,12 @@ function ActMonitor {
 		echo
 		if [ $fails = y ]
 			then
-				sudo airmon-ng check kill >/dev/null
+				$airmon-ng check kill >/dev/null
 			else
 				echo "OK"
 		fi
-		 ifconfig $interfaz promisc >/dev/null
-		 airmon-ng start $interfaz >/dev/null
+		$ifconfig $interfaz promisc >/dev/null
+		$airmon-ng start $interfaz >/dev/null
 		echo "======================="
 		echo "Activando Modo Monitor"
 		echo "======================="
@@ -191,11 +191,11 @@ function ActMonitor {
 		echo
 		read -p "[*] Escribe la Interfaz de la Tarjeta de Red en modo Monitor (Ej: wlan0mon o wlan0): " interfaz2
 		echo
-		 ifconfig $interfaz2 promisc >/dev/null
-		 ifconfig $interfaz2 down >/dev/null
+		$ifconfig $interfaz2 promisc >/dev/null
+		$ifconfig $interfaz2 down >/dev/null
 		sleep 2.5
-		 macchanger -a $interfaz2 >/dev/null
-		 ifconfig $interfaz2 up >/dev/null
+		$macchanger -a $interfaz2 >/dev/null
+		$ifconfig $interfaz2 up >/dev/null
 		echo "======================="
 		echo " Activando Modo Seguro"
 		echo "======================="
@@ -215,15 +215,15 @@ function DesaMonitor {
 	echo
 	echo "[#] Desactivando Ataque y Protocolos"
 	echo
-	 ifconfig $interfaz2 down >/dev/null
+	$ifconfig $interfaz2 down >/dev/null
 	sleep 2.5
-	 ifconfig $interfaz2 promisc >/dev/null
-	 macchanger -p $interfaz2 >/dev/null
-	 ifconfig $interfaz2 up >/dev/null
-	 ifconfig $interfaz2 -promisc >/dev/null
-	 airmon-ng stop $interfaz2 >/dev/null
-	 ifconfig $interfaz -promisc >/dev/null
-	 systemctl restart NetworkManager.service >/dev/null
+	$ifconfig $interfaz2 promisc >/dev/null
+	$macchanger -p $interfaz2 >/dev/null
+	$ifconfig $interfaz2 up >/dev/null
+	$ifconfig $interfaz2 -promisc >/dev/null
+	$airmon-ng stop $interfaz2 >/dev/null
+ $ifconfig $interfaz -promisc >/dev/null
+	$systemctl restart NetworkManager.service >/dev/null
 	echo "=============================="
 	echo "        Desactivando"
 	echo "Ataque/Modo Monitor/Seguridad"
@@ -246,13 +246,13 @@ function DesaMonitor2 {
 	echo
 	echo "[#] Restableciendo Tarjeta de Red"
 	echo
-	sudo ifconfig $interfaz2 down >/dev/null
+	$ifconfig $interfaz2 down >/dev/null
 	sleep 2.5
-	 ifconfig $interfaz2 promisc >/dev/null
-	 macchanger -p $interfaz2 >/dev/null
-	 ifconfig $interfaz2 up >/dev/null
-	 ifconfig $interfaz2 -promisc >/dev/null
-	 airmon-ng stop $interfaz2 >/dev/null
+	$ifconfig $interfaz2 promisc >/dev/null
+	$macchanger -p $interfaz2 >/dev/null
+	$ifconfig $interfaz2 up >/dev/null
+	$ifconfig $interfaz2 -promisc >/dev/null
+	$airmon-ng stop $interfaz2 >/dev/null
 	echo "=============================="
 	echo "  Desactivando Modo Monitor"
 	echo "Restableciendo Tarjeta  de Red"
@@ -272,8 +272,8 @@ function DesaMonitor2 {
 	echo
 	echo "[#] Restableciendo Tarjeta de Red"
 	echo
-	 ifconfig $interfaz -promisc >/dev/null
-	 systemctl restart NetworkManager.service >/dev/null
+	$ifconfig $interfaz -promisc >/dev/null
+	$systemctl restart NetworkManager.service >/dev/null
 	echo "=============================="
 	echo "  Desactivando Modo Monitor"
 	echo "Restableciendo Tarjeta  de Red"
@@ -287,7 +287,7 @@ function DesaMonitor2 {
 	echo "---------------------------->""|"
 	echo "=============================="
 	echo
-	 /etc/init.d/networking restart
+	./etc/init.d/networking restart
 }
 
 check_managed() {
@@ -314,21 +314,21 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 	Title
 	echo "[0] Requisitos"
 	echo
-	 apt-get install xterm -y
-	 apt-get install gnome-terminal -y
-	 apt-get install wireless-tools aircrack-ng -y
-	 apt install aircrack-ng -y
-	 apt install airgraph-ng -y
-	 apt install nmap -y
-	 apt-get install mdk4 -y
-	 apt install hping3 -y
-	 apt-get install bettercap -y
-	 apt install wireshark -y
-	 apt-get install -y netdiscover -y
-	 apt install macchanger -y
-	 apt-get install john -y
-	 apt install iw -y
-	 apt-get install network-manager -y
+	$apt-get install xterm -y
+	$apt-get install gnome-terminal -y
+	$apt-get install wireless-tools aircrack-ng -y
+	$apt install aircrack-ng -y
+	$apt install airgraph-ng -y
+	$apt install nmap -y
+	 $apt-get install mdk4 -y
+	$apt install hping3 -y
+	$apt-get install bettercap -y
+	$apt install wireshark -y
+	$apt-get install -y netdiscover -y
+	$apt install macchanger -y
+  $apt-get install john -y
+	$apt install iw -y
+	$apt-get install network-manager -y
 
 	if ! [ -d requisitos/resultados ]
 		then
@@ -337,13 +337,13 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 
 	cd requisitos
 
-	 rm -r Inhibitor
+	$rm -r Inhibitor
 
-	 git clone https://github.com/XDeadHackerX/Inhibitor.git && cd Inhibitor && chmod 777 installer.sh && cp requisitos/es/inhibitor.sh . && chmod 777 inhibitor.sh
+	$git clone https://github.com/XDeadHackerX/Inhibitor.git && cd Inhibitor && chmod 777 installer.sh && cp requisitos/es/inhibitor.sh . && chmod 777 inhibitor.sh
 
 	cd ..
 	cd ..
 
-	 chmod 777 wifi_troll.sh
-	 bash wifi_troll.sh
+	$chmod 777 wifi_troll.sh
+	$bash wifi_troll.sh
 fi
